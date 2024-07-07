@@ -1,0 +1,14 @@
+Flask
+Flask-SQLAlchemy
+Flask-Bcrypt
+Flask-Migrate
+flask_restful
+Authlib
+Flask-OAuthlib
+flask_jwt_extended
+itsdangerous
+flask_login
+flask_cors
+flask_migrate
+dotenv
+requests
