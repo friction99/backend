@@ -191,11 +191,8 @@ def get_User(user_id):
         try:
             db.session.add(user)
             db.session.commit()
-            # Debug statement after committing to the database
-            print("User data updated in database:", user)
         except Exception as e:
             db.session.rollback()
-            print("Database update failed:", e)
             return jsonify({
                 "message": "Failed to update user data"
             }), 500
@@ -240,7 +237,6 @@ def admin_login():
     data = request.get_json()
     username = data.get('username')
     password = data.get('password')
-    print(username,password)
     if username == os.getenv('ADMIN_USERNAME') and password == os.getenv('ADMIN_PASSWORD'):
         access_token = create_access_token(identity={'role':'admin'})
         return jsonify({'access_token':access_token}),200
