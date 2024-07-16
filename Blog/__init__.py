@@ -11,6 +11,7 @@ from flask_migrate import Migrate
 from dotenv import load_dotenv
 import os
 import requests
+import random
 from itsdangerous import URLSafeTimedSerializer
 
 db = SQLAlchemy()
@@ -20,7 +21,12 @@ app = Flask(__name__,static_folder="../build",static_url_path='/')
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URI')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = os.getenv('APP_SECRET_KEY')
-
+app.config['JWT_SECRET_KEY'] = 'zendaya'
+app.config['JWT_TOKEN_LOCATION'] = ['cookies']
+app.config['JWT_ACCESS_COOKIE_PATH'] = '/'  
+app.config['JWT_COOKIE_SECURE'] = False  
+app.config['JWT_COOKIE_CSRF_PROTECT'] = False  
+app.config['CORS_HEADERS'] = 'Content-Type'
 #Mail Configuration
 app.config['SMTP2GO_API_KEY'] = os.getenv('SMTP2GO_API_KEY')
 serializer = URLSafeTimedSerializer(app.config['SECRET_KEY'])
@@ -30,9 +36,10 @@ migrate = Migrate(app,db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:3000", "supports_credentials": True}})
 bcrypt.init_app(app)
 jwt = JWTManager(app)
+
 cloudinary.config( 
     cloud_name = "dkzfr6oay", 
     api_key = os.getenv('CLOUDINARY_API_KEY'), 
@@ -75,3 +82,6 @@ def send_reset_email(user_email, token):
     print(response.json())
     if response.status_code != 200:
         print(f"Failed to send email: {response.json()}")
+
+def generate_admin_id():
+    return random.randint(1000, 9999)

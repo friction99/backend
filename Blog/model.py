@@ -7,7 +7,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 class User(db.Model,UserMixin):
     id = db.Column(db.Integer,primary_key=True)
-    fullname = db.Column(db.String(20),nullable=True)
+    fullname = db.Column(db.String(20),nullable=True,unique=True)
     firstname = db.Column(db.String(20),nullable=True,unique=False)
     lastname = db.Column(db.String(20),nullable=True,unique=False)
     aboutme = db.Column(db.String(100),nullable=True,unique=False)
@@ -26,8 +26,8 @@ class User(db.Model,UserMixin):
     
 class Blog(db.Model):
     id = db.Column(db.Integer,primary_key=True)
-    title = db.Column(db.String(20),nullable=False,unique=True)
-    content = db.Column(db.String(2000),nullable = False)
+    title = db.Column(db.String(50),nullable=False)
+    content = db.Column(db.String(5000),nullable = False)
     author = db.Column(db.Integer,db.ForeignKey('user.id'), nullable=False)
     image_url = db.Column(db.String(255),nullable=True)
     created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))  # Timestamp for creation

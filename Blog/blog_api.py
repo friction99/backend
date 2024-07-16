@@ -38,6 +38,7 @@ class BlogApi(Resource):
             result.title = args['title']
         if args['content']:
             result.content = args['content']
+        result.status = 'pending'
         db.session.commit()
         return result, 202
 
